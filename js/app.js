@@ -406,11 +406,9 @@ class UIManager {
 
     checkPassword(password) {
         if (password === this.data.config.teacherPassword) {
-            document.getElementById('teacherModal').classList.remove('active');
-            document.getElementById('adminModal').classList.add('active');
             this.sound.playSuccess();
-            password = '';
-            document.getElementById('teacherPassword').value = '';
+            // 跳转到管理页面
+            window.location.href = 'admin.html';
         } else {
             this.sound.playScoreDown();
             alert('密码错误！');
