@@ -58,35 +58,62 @@ body {
     transform: translateY(0);
 }
 
+/* 选择风格按钮 */
+.btn-style {
+    padding: 12px 24px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+    margin-right: 15px;
+}
+
+.btn-style:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
 /* 宠物网格 - 40人布局 */
 .pet-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    gap: 15px;
-    padding: 100px 30px 30px;
-    height: 100vh;
+    gap: 12px;
+    padding: 100px 20px 20px;
+    height: calc(100vh - 80px);
+    max-width: 1600px;
+    margin: 0 auto;
 }
 
 /* 宠物卡片 */
 .pet-card {
     background: white;
-    border-radius: 20px;
-    padding: 15px;
+    border-radius: 16px;
+    padding: 10px 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
+    min-height: 140px;
 }
 
 .pet-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .pet-card:active {
@@ -95,21 +122,25 @@ body {
 
 /* 宠物图片容器 */
 .pet-image-container {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
     position: relative;
+    flex-shrink: 0;
 }
 
 .pet-image {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     transition: all 0.3s;
+    font-size: 36px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 宠物阶段颜色 */
@@ -120,27 +151,34 @@ body {
 
 /* 学生姓名 */
 .student-name {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 5px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 /* 积分显示 */
 .score-display {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     color: #667eea;
+    margin-bottom: 4px;
 }
 
 /* 阶段标签 */
 .stage-badge {
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 12px;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 10px;
     color: white;
     font-weight: 500;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 .stage-badge.egg { background: #FFB347; }
@@ -640,21 +678,25 @@ body {
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .pet-style-option {
     background: white;
     border-radius: 15px;
-    padding: 20px;
+    padding: 25px 15px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 2px solid transparent;
 }
 
 .pet-style-option:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #667eea;
 }
 
 .pet-style-option.selected {
@@ -663,8 +705,9 @@ body {
 }
 
 .pet-style-option .style-preview {
-    font-size: 60px;
+    font-size: 50px;
     margin-bottom: 10px;
+    display: block;
 }
 
 .pet-style-option .style-name {
