@@ -633,3 +633,42 @@ body {
         transform: translateY(-50px);
     }
 }
+
+/* 宠物风格选择 */
+.pet-style-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.pet-style-option {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.pet-style-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.pet-style-option.selected {
+    border: 3px solid #667eea;
+    background: #f0f4ff;
+}
+
+.pet-style-option .style-preview {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.pet-style-option .style-name {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}

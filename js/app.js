@@ -519,3 +519,52 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('ClassPet Pro 大屏端已加载！');
     console.log('背景音乐已启动，点击页面任意处开启音效');
 });
+
+// ==================== 宠物风格选择 ====================
+function initPetStyleSelection() {
+    const petSelectModal = document.getElementById('petSelectModal');
+    const petStyleGrid = document.getElementById('petStyleGrid');
+    
+    if (!petSelectModal || !petStyleGrid) return;
+    
+    // 绑定选择事件
+    petStyleGrid.querySelectorAll('.pet-style-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const style = option.dataset.style;
+            selectPetStyle(style);
+            
+            // 关闭弹窗
+            petSelectModal.classList.remove('active');
+            
+            // 播放音效
+            if (window.ClassPet && window.ClassPet.audio) {
+                window.ClassPet.audio.playSuccess();
+            }
+        });
+    });
+}
+
+function selectPetStyle(style) {
+    // 保存选择的风格
+    localStorage.setItem('classpet_selected_style', style);
+    
+    // 更新宠物显示
+    if (window.ClassPet && window.ClassPet.pets) {
+        window.ClassPet.pets.saveStyle(style);
+        window.ClassPet.ui.renderPetGrid();
+    }
+    
+    console.log('已选择宠物风格:', style);
+}
+
+function showPetStyleSelection() {
+    const petSelectModal = document.getElementById('petSelectModal');
+    if (petSelectModal) {
+        petSelectModal.classList.add('active');
+    }
+}
+
+// 页面加载完成后初始化选择功能
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initPetStyleSelection, 1000);
+});
