@@ -408,7 +408,7 @@ class UIManager {
         if (password === this.data.config.teacherPassword) {
             this.sound.playSuccess();
             // 跳转到管理页面
-            window.location.href = 'admin.html';
+            window.location.href = './admin.html';
         } else {
             this.sound.playScoreDown();
             alert('密码错误！');
