@@ -2,153 +2,294 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ClassPet Pro - 班级宠物养成</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <!-- 顶部标题栏 -->
+        <!-- 顶部导航栏 -->
         <header class="header">
-            <h1 class="class-name">🌟 三年级一班宠物乐园</h1>
-            <div class="header-actions">
-                <button class="btn-style" id="btnSelectStyle" onclick="showPetStyleSelection()">🎨 选择风格</button>
+            <div class="header-left">
+                <div class="logo">🐾</div>
+                <div class="class-info">
+                    <h1 class="class-name">三年级一班</h1>
+                    <span class="class-subtitle">宠物乐园</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="class-total-points">
+                    <span class="total-label">班级总分</span>
+                    <span class="total-value" id="classTotalPoints">0</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn-tool" id="btnTimer" title="计时器">⏱️</button>
+                <button class="btn-tool" id="btnRandom" title="随机选人">🎲</button>
+                <button class="btn-tool" id="btnStyle" title="切换风格">🎨</button>
                 <button class="btn-teacher" id="btnTeacher">👨‍🏫 教师模式</button>
             </div>
         </header>
 
-        <!-- 宠物展示区 -->
-        <main class="pet-grid" id="petGrid">
-            <!-- 动态生成40个宠物卡片 -->
+        <!-- 行为类型快捷栏 -->
+        <div class="behavior-bar" id="behaviorBar">
+            <div class="behavior-section positive">
+                <span class="section-label">👍 表扬</span>
+                <div class="behavior-buttons" id="positiveBehaviors">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+            <div class="behavior-section negative">
+                <span class="section-label">👎 提醒</span>
+                <div class="behavior-buttons" id="negativeBehaviors">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 学生网格展示区 -->
+        <main class="students-grid" id="studentsGrid">
+            <!-- 动态生成学生卡片 -->
         </main>
 
-        <!-- 学生详情弹窗 -->
+        <!-- 底部工具栏 -->
+        <footer class="bottom-bar">
+            <button class="bottom-btn" id="btnViewMode">
+                <span class="btn-icon">👁️</span>
+                <span class="btn-text">视图</span>
+            </button>
+            <button class="bottom-btn" id="btnGroupMode">
+                <span class="btn-icon">👥</span>
+                <span class="btn-text">小组</span>
+            </button>
+            <button class="bottom-btn" id="btnHistory">
+                <span class="btn-icon">📊</span>
+                <span class="btn-text">记录</span>
+            </button>
+            <button class="bottom-btn" id="btnSettings">
+                <span class="btn-icon">⚙️</span>
+                <span class="btn-text">设置</span>
+            </button>
+        </footer>
+
+        <!-- ========== 弹窗组件 ========== -->
+
+        <!-- 学生详情/评分弹窗 -->
         <div class="modal" id="studentModal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeModal">&times;</span>
-                <div class="student-detail">
-                    <div class="pet-display">
-                        <img id="detailPetImage" src="" alt="宠物">
-                        <div class="evolution-effect" id="evolutionEffect"></div>
+            <div class="modal-overlay"></div>
+            <div class="modal-content student-modal-content">
+                <div class="modal-header">
+                    <button class="btn-back" id="closeStudentModal">←</button>
+                    <h2 id="studentModalTitle">学生详情</h2>
+                    <div class="modal-actions">
+                        <button class="btn-icon-action" id="btnStudentHistory">📋</button>
                     </div>
-                    <h2 id="detailName">学生姓名</h2>
-                    <div class="score-section">
-                        <div class="current-score">
-                            <span class="score-label">当前积分</span>
-                            <span class="score-value" id="detailScore">0</span>
+                </div>
+                <div class="modal-body">
+                    <div class="student-profile">
+                        <div class="avatar-large" id="studentAvatar">
+                            <div class="avatar-emoji" id="studentAvatarEmoji">🥚</div>
+                            <div class="avatar-level" id="studentLevel">蛋</div>
                         </div>
-                        <div class="score-controls">
-                            <button class="btn-score btn-minus" data-value="-5">-5</button>
-                            <button class="btn-score btn-minus" data-value="-1">-1</button>
-                            <button class="btn-score btn-plus" data-value="+1">+1</button>
-                            <button class="btn-score btn-plus" data-value="+5">+5</button>
-                            <button class="btn-score btn-plus" data-value="+10">+10</button>
+                        <div class="student-info">
+                            <h3 id="studentName">姓名</h3>
+                            <div class="points-display">
+                                <span class="current-points" id="studentPoints">0</span>
+                                <span class="points-label">积分</span>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- 行为选择区 -->
+                    <div class="behavior-selector">
+                        <div class="behavior-tabs">
+                            <button class="tab-btn active" data-tab="positive">👍 表扬</button>
+                            <button class="tab-btn" data-tab="negative">👎 提醒</button>
+                            <button class="tab-btn" data-tab="skills">🎯 技能</button>
+                        </div>
+                        <div class="behavior-grid" id="behaviorGrid">
+                            <!-- 动态生成行为按钮 -->
+                        </div>
+                    </div>
+
+                    <!-- 进度展示 -->
                     <div class="progress-section">
-                        <div class="stage-info">
-                            <span id="currentStage">蛋</span>
-                            <span class="arrow">→</span>
-                            <span id="nextStage">幼崽</span>
+                        <div class="stage-progress">
+                            <div class="stage-item active" data-stage="0">
+                                <div class="stage-icon">🥚</div>
+                                <span>蛋</span>
+                            </div>
+                            <div class="stage-line"></div>
+                            <div class="stage-item" data-stage="1">
+                                <div class="stage-icon">🐣</div>
+                                <span>幼崽</span>
+                            </div>
+                            <div class="stage-line"></div>
+                            <div class="stage-item" data-stage="2">
+                                <div class="stage-icon">🦊</div>
+                                <span>成长期</span>
+                            </div>
+                            <div class="stage-line"></div>
+                            <div class="stage-item" data-stage="3">
+                                <div class="stage-icon">🦁</div>
+                                <span>完全体</span>
+                            </div>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <div class="progress-text">
-                            还需 <span id="needScore">50</span> 分升级
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">还需 50 分升级</span>
                         </div>
                     </div>
-                    <div class="rewards-section">
-                        <h3>🏆 已获得奖励</h3>
-                        <div class="rewards-list" id="rewardsList">
-                            <span class="no-rewards">暂无奖励</span>
-                        </div>
-                    </div>
-                    <button class="btn-redeem" id="btnRedeem">🎁 兑换奖励</button>
                 </div>
             </div>
         </div>
 
-        <!-- 教师模式密码弹窗 -->
+        <!-- 计时器弹窗 -->
+        <div class="modal" id="timerModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content timer-modal">
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-presets">
+                    <button data-time="60">1分钟</button>
+                    <button data-time="180">3分钟</button>
+                    <button data-time="300">5分钟</button>
+                    <button data-time="600">10分钟</button>
+                </div>
+                <div class="timer-controls">
+                    <button class="btn-timer-control" id="btnTimerStart">▶️ 开始</button>
+                    <button class="btn-timer-control" id="btnTimerPause">⏸️ 暂停</button>
+                    <button class="btn-timer-control" id="btnTimerReset">🔄 重置</button>
+                </div>
+                <button class="btn-close-modal" id="closeTimerModal">✕</button>
+            </div>
+        </div>
+
+        <!-- 随机选人弹窗 -->
+        <div class="modal" id="randomModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content random-modal">
+                <div class="random-animating" id="randomAnimating">
+                    <div class="random-avatar">❓</div>
+                    <div class="random-name">随机选择中...</div>
+                </div>
+                <div class="random-result" id="randomResult" style="display: none;">
+                    <div class="random-avatar" id="randomResultAvatar">🎉</div>
+                    <div class="random-name" id="randomResultName">选中者</div>
+                </div>
+                <button class="btn-random-start" id="btnRandomStart">🎲 开始抽取</button>
+                <button class="btn-close-modal" id="closeRandomModal">✕</button>
+            </div>
+        </div>
+
+        <!-- 历史记录弹窗 -->
+        <div class="modal" id="historyModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content history-modal">
+                <div class="modal-header">
+                    <button class="btn-back" id="closeHistoryModal">←</button>
+                    <h2>📊 今日记录</h2>
+                </div>
+                <div class="history-filters">
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="positive">表扬</button>
+                    <button class="filter-btn" data-filter="negative">提醒</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 教师验证弹窗 -->
         <div class="modal" id="teacherModal">
-            <div class="modal-content modal-small">
+            <div class="modal-overlay"></div>
+            <div class="modal-content teacher-modal">
                 <h2>🔐 教师验证</h2>
-                <div class="password-input">
-                    <input type="password" id="teacherPassword" placeholder="请输入4位密码" maxlength="4">
-                </div>
-                <div class="numpad" id="numpad">
-                    <button>1</button><button>2</button><button>3</button>
-                    <button>4</button><button>5</button><button>6</button>
-                    <button>7</button><button>8</button><button>9</button>
-                    <button class="btn-clear">C</button><button>0</button><button class="btn-ok">✓</button>
+                <div class="password-display" id="passwordDisplay">••••</div>
+                <div class="numpad">
+                    <button class="num-btn">1</button>
+                    <button class="num-btn">2</button>
+                    <button class="num-btn">3</button>
+                    <button class="num-btn">4</button>
+                    <button class="num-btn">5</button>
+                    <button class="num-btn">6</button>
+                    <button class="num-btn">7</button>
+                    <button class="num-btn">8</button>
+                    <button class="num-btn">9</button>
+                    <button class="num-btn btn-clear">C</button>
+                    <button class="num-btn">0</button>
+                    <button class="num-btn btn-ok">✓</button>
                 </div>
             </div>
         </div>
 
-        <!-- 教师管理面板 -->
+        <!-- 管理面板 -->
         <div class="modal" id="adminModal">
-            <div class="modal-content modal-large">
-                <span class="close-btn" id="closeAdmin">&times;</span>
-                <h2>⚙️ 班级管理</h2>
-                <div class="admin-tabs">
-                    <button class="tab-btn active" data-tab="students">👥 学生管理</button>
-                    <button class="tab-btn" data-tab="settings">🔧 进化设置</button>
-                    <button class="tab-btn" data-tab="rewards">🎁 奖励设置</button>
-                    <button class="tab-btn" data-tab="data">💾 数据管理</button>
+            <div class="modal-overlay"></div>
+            <div class="modal-content admin-modal-content">
+                <div class="modal-header">
+                    <button class="btn-back" id="closeAdminModal">←</button>
+                    <h2>⚙️ 班级管理</h2>
                 </div>
-                <div class="tab-content" id="tabContent">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="students">👥 学生</button>
+                    <button class="admin-tab" data-tab="behaviors">🏷️ 行为</button>
+                    <button class="admin-tab" data-tab="rewards">🎁 奖励</button>
+                    <button class="admin-tab" data-tab="settings">🔧 设置</button>
+                </div>
+                <div class="admin-content" id="adminContent">
                     <!-- 动态内容 -->
                 </div>
             </div>
         </div>
 
-        <!-- 兑换奖励弹窗 -->
-        <div class="modal" id="redeemModal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeRedeem">&times;</span>
-                <h2>🎁 兑换奖励</h2>
-                <div class="redeem-list" id="redeemList">
-                    <!-- 动态生成奖励列表 -->
+        <!-- 宠物风格选择 -->
+        <div class="modal" id="styleModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content style-modal">
+                <div class="modal-header">
+                    <button class="btn-back" id="closeStyleModal">←</button>
+                    <h2>🎨 选择宠物风格</h2>
+                </div>
+                <div class="style-grid" id="styleGrid">
+                    <div class="style-card" data-style="cute">
+                        <div class="style-preview">🐱</div>
+                        <span class="style-name">萌宠风</span>
+                    </div>
+                    <div class="style-card" data-style="fantasy">
+                        <div class="style-preview">🐉</div>
+                        <span class="style-name">幻想风</span>
+                    </div>
+                    <div class="style-card" data-style="pixel">
+                        <div class="style-preview">🐤</div>
+                        <span class="style-name">像素风</span>
+                    </div>
+                    <div class="style-card" data-style="scifi">
+                        <div class="style-preview">🤖</div>
+                        <span class="style-name">科幻风</span>
+                    </div>
+                    <div class="style-card" data-style="china">
+                        <div class="style-preview">🐼</div>
+                        <span class="style-name">国潮风</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 进化庆祝弹窗 -->
-        <div class="modal celebration" id="celebrationModal">
+        <!-- 积分动画效果层 -->
+        <div class="effects-layer" id="effectsLayer"></div>
+
+        <!-- 庆祝全屏效果 -->
+        <div class="celebration-overlay" id="celebrationOverlay">
             <div class="celebration-content">
-                <div class="celebration-pet" id="celebrationPet"></div>
-                <h1 class="celebration-title">🎉 恭喜进化！</h1>
+                <div class="celebration-pet" id="celebrationPet">🎉</div>
+                <h2 class="celebration-title" id="celebrationTitle">恭喜升级！</h2>
                 <p class="celebration-text" id="celebrationText"></p>
-                <button class="btn-celebrate" id="btnCelebrate">太棒了！</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 宠物风格选择弹窗 -->
-    <div class="modal" id="petSelectModal">
-        <div class="modal-content">
-            <h2>🎨 选择你的宠物风格</h2>
-            <div class="pet-style-grid" id="petStyleGrid">
-                <div class="pet-style-option" data-style="cute">
-                    <div class="style-preview">🐱</div>
-                    <div class="style-name">萌宠风</div>
-                </div>
-                <div class="pet-style-option" data-style="fantasy">
-                    <div class="style-preview">🐉</div>
-                    <div class="style-name">幻想风</div>
-                </div>
-                <div class="pet-style-option" data-style="pixel">
-                    <div class="style-preview">🐤</div>
-                    <div class="style-name">像素风</div>
-                </div>
-                <div class="pet-style-option" data-style="scifi">
-                    <div class="style-preview">🤖</div>
-                    <div class="style-name">科幻风</div>
-                </div>
-                <div class="pet-style-option" data-style="china">
-                    <div class="style-preview">🐼</div>
-                    <div class="style-name">国潮风</div>
-                </div>
+                <button class="btn-celebrate-close" id="btnCelebrateClose">太棒了！</button>
             </div>
         </div>
     </div>
@@ -156,7 +297,6 @@
     <script src="js/pets.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/effects.js"></script>
-    <script src="js/feishu-sync.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
