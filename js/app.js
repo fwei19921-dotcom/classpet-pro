@@ -407,12 +407,8 @@ class UIManager {
     checkPassword(password) {
         if (password === this.data.config.teacherPassword) {
             this.sound.playSuccess();
-            // 关闭密码弹窗
-            document.getElementById('teacherModal').classList.remove('active');
-            // 跳转到管理页面 - 使用绝对路径确保跳转成功
-            const currentPath = window.location.pathname;
-            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
-            window.location.href = basePath + 'admin.html';
+            // 跳转到管理页面
+            window.location.href = './admin.html';
         } else {
             this.sound.playScoreDown();
             alert('密码错误！');
@@ -529,48 +525,34 @@ function initPetStyleSelection() {
     const petSelectModal = document.getElementById('petSelectModal');
     const petStyleGrid = document.getElementById('petStyleGrid');
     
-    if (!petSelectModal || !petStyleGrid) {
-        console.error('宠物选择弹窗元素未找到');
-        return;
-    }
+    if (!petSelectModal || !petStyleGrid) return;
     
-    console.log('初始化宠物风格选择，找到', petStyleGrid.querySelectorAll('.pet-style-option').length, '个选项');
-    
-    // 绑定选择事件 - 使用事件委托
-    petStyleGrid.addEventListener('click', (e) => {
-        const option = e.target.closest('.pet-style-option');
-        if (!option) return;
-        
-        const style = option.dataset.style;
-        console.log('选择风格:', style);
-        selectPetStyle(style);
-        
-        // 关闭弹窗
-        petSelectModal.classList.remove('active');
-        
-        // 播放音效
-        if (window.ClassPet && window.ClassPet.audio) {
-            window.ClassPet.audio.playSuccess();
-        }
+    // 绑定选择事件
+    petStyleGrid.querySelectorAll('.pet-style-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const style = option.dataset.style;
+            selectPetStyle(style);
+            
+            // 关闭弹窗
+            petSelectModal.classList.remove('active');
+            
+            // 播放音效
+            if (window.ClassPet && window.ClassPet.audio) {
+                window.ClassPet.audio.playSuccess();
+            }
+        });
     });
 }
 
 function selectPetStyle(style) {
     // 保存选择的风格
     localStorage.setItem('classpet_selected_style', style);
-    localStorage.setItem('classpet_pet_style', style);
     
     // 更新宠物显示
     if (window.ClassPet && window.ClassPet.pets) {
         window.ClassPet.pets.saveStyle(style);
-        if (window.ClassPet.ui && window.ClassPet.ui.renderPetGrid) {
-            window.ClassPet.ui.renderPetGrid();
-        }
+        window.ClassPet.ui.renderPetGrid();
     }
-    
-    // 显示提示
-    const styleNames = { cute: '萌宠风', fantasy: '幻想风', pixel: '像素风', scifi: '科幻风', china: '国潮风' };
-    alert(`已切换到${styleNames[style] || style}！`);
     
     console.log('已选择宠物风格:', style);
 }
@@ -579,14 +561,10 @@ function showPetStyleSelection() {
     const petSelectModal = document.getElementById('petSelectModal');
     if (petSelectModal) {
         petSelectModal.classList.add('active');
-        console.log('打开宠物风格选择弹窗');
-    } else {
-        console.error('找不到宠物选择弹窗');
     }
 }
 
-// 页面加载完成后立即初始化选择功能
+// 页面加载完成后初始化选择功能
 document.addEventListener('DOMContentLoaded', () => {
-    // 立即初始化，不延迟
-    initPetStyleSelection();
+    setTimeout(initPetStyleSelection, 1000);
 });
