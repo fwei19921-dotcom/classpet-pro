@@ -620,3 +620,41 @@ function initStyleSelection() {
     
     console.log('宠物风格选择初始化完成');
 }
+
+// ==================== 全局数字键盘函数 ====================
+let numpadPassword = '';
+
+function numpadInput(num) {
+    const input = document.getElementById('teacherPassword');
+    if (numpadPassword.length < 4) {
+        numpadPassword += num;
+        input.value = numpadPassword;
+    }
+}
+
+function numpadClear() {
+    const input = document.getElementById('teacherPassword');
+    numpadPassword = '';
+    input.value = '';
+}
+
+function numpadSubmit() {
+    console.log('提交密码:', numpadPassword);
+    if (numpadPassword === '1234') {
+        // 播放成功音效
+        if (window.ClassPet && window.ClassPet.audio) {
+            window.ClassPet.audio.playSuccess();
+        }
+        // 关闭弹窗
+        document.getElementById('teacherModal').classList.remove('active');
+        // 跳转
+        window.location.href = 'admin.html';
+    } else {
+        // 播放错误音效
+        if (window.ClassPet && window.ClassPet.audio) {
+            window.ClassPet.audio.playScoreDown();
+        }
+        alert('密码错误！');
+        numpadClear();
+    }
+}
