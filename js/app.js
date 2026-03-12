@@ -394,23 +394,31 @@ class UIManager {
         let password = '';
 
         document.querySelectorAll('.numpad button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const val = btn.textContent;
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const val = btn.textContent.trim();
+                console.log('按钮点击:', val);
                 
                 if (val === 'C') {
                     password = '';
-                } else if (val === '✓') {
+                } else if (val === '✓' || val === '✓' || val.includes('✓')) {
+                    console.log('确认按钮点击，当前密码:', password);
                     this.checkPassword(password);
                     password = '';
-                } else {
+                } else if (/^[0-9]$/.test(val)) {
                     if (password.length < 4) {
                         password += val;
                     }
                 }
                 
                 passwordInput.value = password;
+                console.log('密码输入:', password);
             });
         });
+        
+        console.log('数字键盘绑定完成');
     }
 
     checkPassword(password) {
