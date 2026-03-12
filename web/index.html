@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>ClassPet Pro - 班级宠物养成</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
 <body>
     <div id="app">
@@ -12,6 +12,7 @@
         <header class="header">
             <h1 class="class-name">🌟 三年级一班宠物乐园</h1>
             <div class="header-actions">
+                <button class="btn-style" id="btnSelectStyle" onclick="showPetStyleSelection()">🎨 选择风格</button>
                 <button class="btn-teacher" id="btnTeacher">👨‍🏫 教师模式</button>
             </div>
         </header>
@@ -119,6 +120,35 @@
                 <h1 class="celebration-title">🎉 恭喜进化！</h1>
                 <p class="celebration-text" id="celebrationText"></p>
                 <button class="btn-celebrate" id="btnCelebrate">太棒了！</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 宠物风格选择弹窗 -->
+    <div class="modal" id="petSelectModal">
+        <div class="modal-content">
+            <h2>🎨 选择你的宠物风格</h2>
+            <div class="pet-style-grid" id="petStyleGrid">
+                <div class="pet-style-option" data-style="cute">
+                    <div class="style-preview">🐱</div>
+                    <div class="style-name">萌宠风</div>
+                </div>
+                <div class="pet-style-option" data-style="fantasy">
+                    <div class="style-preview">🐉</div>
+                    <div class="style-name">幻想风</div>
+                </div>
+                <div class="pet-style-option" data-style="pixel">
+                    <div class="style-preview">🐤</div>
+                    <div class="style-name">像素风</div>
+                </div>
+                <div class="pet-style-option" data-style="scifi">
+                    <div class="style-preview">🤖</div>
+                    <div class="style-name">科幻风</div>
+                </div>
+                <div class="pet-style-option" data-style="china">
+                    <div class="style-preview">🐼</div>
+                    <div class="style-name">国潮风</div>
+                </div>
             </div>
         </div>
     </div>
