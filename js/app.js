@@ -186,9 +186,10 @@ class SoundManager {
 
 // ==================== UI管理 ====================
 class UIManager {
-    constructor(dataManager, soundManager) {
+    constructor(dataManager, soundManager, petManager) {
         this.data = dataManager;
         this.sound = soundManager;
+        this.pets = petManager;
         this.currentStudentId = null;
         this.init();
     }
@@ -202,15 +203,23 @@ class UIManager {
         const grid = document.getElementById('petGrid');
         grid.innerHTML = '';
 
+        // 获取当前风格的宠物数据
+        const currentPets = this.pets ? this.pets.getCurrentPets() : null;
+
         this.data.students.forEach(student => {
             const stage = this.data.getStage(student.score);
+            const stageIndex = this.data.config.stages.findIndex(s => s.name === stage.name);
+            
+            // 使用宠物风格的 emoji 或默认 emoji
+            const petEmoji = currentPets && currentPets[stageIndex] ? currentPets[stageIndex].emoji : stage.emoji;
+            
             const card = document.createElement('div');
             card.className = 'pet-card';
             card.dataset.id = student.id;
             
             card.innerHTML = `
                 <div class="pet-image-container ${stage.bgClass}">
-                    <div class="pet-image" style="font-size: 50px;">${stage.emoji}</div>
+                    <div class="pet-image" style="font-size: 50px;">${petEmoji}</div>
                 </div>
                 <div class="student-name">${student.name}</div>
                 <div class="score-display">${student.score}分</div>
@@ -405,14 +414,19 @@ class UIManager {
     }
 
     checkPassword(password) {
+        console.log('验证密码:', password, '期望:', this.data.config.teacherPassword);
         if (password === this.data.config.teacherPassword) {
             this.sound.playSuccess();
+            // 关闭弹窗
+            document.getElementById('teacherModal').classList.remove('active');
             // 跳转到管理页面
-            window.location.href = './admin.html';
+            console.log('密码正确，跳转到 admin.html');
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 300);
         } else {
             this.sound.playScoreDown();
             alert('密码错误！');
-            password = '';
             document.getElementById('teacherPassword').value = '';
         }
     }
