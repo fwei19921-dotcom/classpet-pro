@@ -70,21 +70,13 @@
             </div>
         </div>
 
-        <!-- 教师模式密码弹窗 -->
+        <!-- 教师模式弹窗 -->
         <div class="modal" id="teacherModal">
             <div class="modal-content modal-small">
-                <h2>🔐 教师验证</h2>
-                <div class="password-input">
-                    <input type="password" id="teacherPassword" placeholder="请输入4位密码" maxlength="4">
-                </div>
-                <div class="numpad" id="numpad">
-                    <button onclick="numpadInput('1')">1</button><button onclick="numpadInput('2')">2</button><button onclick="numpadInput('3')">3</button>
-                    <button onclick="numpadInput('4')">4</button><button onclick="numpadInput('5')">5</button><button onclick="numpadInput('6')">6</button>
-                    <button onclick="numpadInput('7')">7</button><button onclick="numpadInput('8')">8</button><button onclick="numpadInput('9')">9</button>
-                    <button class="btn-clear" onclick="numpadClear()">C</button><button onclick="numpadInput('0')">0</button><button class="btn-ok" onclick="numpadSubmit()">✓</button>
-                </div>
-                <div style="margin-top: 10px; text-align: center;">
-                    <button onclick="window.location.href='admin.html'" style="padding: 10px 20px; font-size: 16px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">直接跳转管理页面</button>
+                <h2>🔐 教师模式</h2>
+                <p style="text-align: center; margin: 20px 0; color: #666;">点击下方按钮进入管理页面</p>
+                <div style="text-align: center; padding: 20px;">
+                    <button onclick="document.getElementById('teacherModal').classList.remove('active'); window.location.href='admin.html';" style="padding: 15px 40px; font-size: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">进入管理页面</button>
                 </div>
             </div>
         </div>
