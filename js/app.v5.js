@@ -518,9 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('ClassPet Pro 大屏端已加载！');
     console.log('背景音乐已启动，点击页面任意处开启音效');
-    
-    // 初始化宠物风格选择
-    initStyleSelection();
 });
 
 // ==================== 宠物风格选择 ====================
@@ -547,6 +544,19 @@ function initPetStyleSelection() {
     });
 }
 
+function selectPetStyle(style) {
+    // 保存选择的风格
+    localStorage.setItem('classpet_selected_style', style);
+    
+    // 更新宠物显示
+    if (window.ClassPet && window.ClassPet.pets) {
+        window.ClassPet.pets.saveStyle(style);
+        window.ClassPet.ui.renderPetGrid();
+    }
+    
+    console.log('已选择宠物风格:', style);
+}
+
 function showPetStyleSelection() {
     const petSelectModal = document.getElementById('petSelectModal');
     if (petSelectModal) {
@@ -554,47 +564,7 @@ function showPetStyleSelection() {
     }
 }
 
-// 页面加载完成后初始化选择功能 - 合并到主初始化中
-function initStyleSelection() {
-    const petSelectModal = document.getElementById('petSelectModal');
-    const petStyleGrid = document.getElementById('petStyleGrid');
-    
-    if (!petSelectModal || !petStyleGrid) {
-        console.log('宠物选择元素未找到，跳过初始化');
-        return;
-    }
-    
-    // 绑定选择事件 - 使用事件委托
-    petStyleGrid.addEventListener('click', (e) => {
-        const option = e.target.closest('.pet-style-option');
-        if (!option) return;
-        
-        const style = option.dataset.style;
-        console.log('选择风格:', style);
-        
-        // 保存选择的风格
-        localStorage.setItem('classpet_selected_style', style);
-        
-        // 更新宠物显示
-        if (window.ClassPet && window.ClassPet.pets) {
-            window.ClassPet.pets.saveStyle(style);
-            if (window.ClassPet.ui && window.ClassPet.ui.renderPetGrid) {
-                window.ClassPet.ui.renderPetGrid();
-            }
-        }
-        
-        // 关闭弹窗
-        petSelectModal.classList.remove('active');
-        
-        // 播放音效
-        if (window.ClassPet && window.ClassPet.audio) {
-            window.ClassPet.audio.playSuccess();
-        }
-        
-        // 显示提示
-        const styleNames = { cute: '萌宠风', fantasy: '幻想风', pixel: '像素风', scifi: '科幻风', china: '国潮风' };
-        alert(`已切换到${styleNames[style] || style}！`);
-    });
-    
-    console.log('宠物风格选择初始化完成');
-}
+// 页面加载完成后初始化选择功能
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initPetStyleSelection, 1000);
+});

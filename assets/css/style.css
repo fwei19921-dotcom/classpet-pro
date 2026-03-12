@@ -151,16 +151,16 @@ body {
 
 /* 学生姓名 */
 .student-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #333;
     margin-top: 6px;
     margin-bottom: 4px;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
     max-width: 100%;
+    line-height: 1.2;
 }
 
 /* 积分显示 */
